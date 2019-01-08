@@ -94,14 +94,17 @@ public class TuringRobotUtil {
         String userId = "21100880";
         String content = "你好吗?";
         try {
-            String query = query(reqType, userId, content);
+//            String query = query(reqType, userId, content);
+
+           String query = " {\"emotion\":{\"robotEmotion\":{\"a\":0,\"d\":0,\"emotionId\":0,\"p\":0},\"userEmotion\":{\"a\":0,\"d\":0,\"emotionId\":21500,\"p\":0}},\"intent\":{\"actionName\":\"\",\"code\":10004,\"intentName\":\"\"},\"results\":[{\"groupType\":1,\"resultType\":\"text\",\"values\":{\"text\":\"还不错，你呢\"}}]}";
+
             String result = getResult(query);
 
 
             Knowledge knowledge = new Knowledge();
             knowledge.setQuery("");
             knowledge.setReply(result);
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
