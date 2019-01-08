@@ -136,6 +136,7 @@ public class WechatController {
             String reply = null;
             try {
                 reply = TuringRobotUtil.query(ReqTypeEnum.TEXT.getCode(), UUIDUtil.getId(), sql);
+                logger.info("--图灵机器人回复-->:" + reply);
                 Knowledge knowledge = TuringRobotUtil.getResult(reply, sql);
                 executorService.submit(() -> {
                     knowledgeService.save(knowledge);
