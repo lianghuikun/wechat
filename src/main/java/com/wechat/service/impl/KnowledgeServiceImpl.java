@@ -16,4 +16,19 @@ public class KnowledgeServiceImpl implements KnowledgeService {
     public List<Knowledge> getKnowledgeList() {
         return knowledgeDao.findAll();
     }
+
+    @Override
+    public void save(Knowledge knowledge) {
+        knowledgeDao.save(knowledge);
+    }
+
+    @Override
+    public void update(Knowledge knowledge) {
+        knowledgeDao.saveAndFlush(knowledge);
+    }
+
+    @Override
+    public void deleteById(Integer id) {
+        knowledgeDao.deleteById(id);
+    }
 }
