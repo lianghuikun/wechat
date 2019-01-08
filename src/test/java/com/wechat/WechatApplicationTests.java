@@ -17,11 +17,9 @@ public class WechatApplicationTests {
 
     @Autowired
     private KnowledgeDao knowledgeDao;
+
     @Test
     public void contextLoads() {
-
-        List<Knowledge> all = knowledgeDao.findAll();
-        System.out.println("-------->:" + JSON.toJSONString(all));
     }
 
 }
