@@ -1,8 +1,14 @@
 package com.wechat.robot;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.wechat.constant.ConstantCode;
+import com.wechat.domain.Knowledge;
 import com.wechat.enums.ReqTypeEnum;
 import okhttp3.*;
+
+import java.io.IOException;
+import java.util.Collection;
 
 /**
  * 图灵机器人
@@ -21,7 +27,7 @@ public class TuringRobotUtil {
      * @param reqType 输入类型:0-文本(默认)、1-图片、2-音频
      * @param userId  用户位移标识
      */
-    public static void query(Integer reqType, String userId, String content) {
+    public static String query(Integer reqType, String userId, String content) throws IOException {
         JSONObject request = new JSONObject();
         request.put("reqType", reqType);
         JSONObject perception = new JSONObject();
@@ -60,17 +66,43 @@ public class TuringRobotUtil {
 
             // {"intent":{"code":4001},"results":[{"groupType":0,"resultType":"text","values":{"text":"加密方式错误!"}}]}
             System.out.println("----------->:" + string);
-
+            return string;
             // {"emotion":{"robotEmotion":{"a":0,"d":0,"emotionId":0,"p":0},"userEmotion":{"a":0,"d":0,"emotionId":21500,"p":0}},"intent":{"actionName":"","code":10004,"intentName":""},"results":[{"groupType":1,"resultType":"text","values":{"text":"还不错，你呢"}}]}
-        } catch (Exception e) {
-            e.printStackTrace();
         }
+    }
+
+    /**
+     * 获取结果
+     *
+     * @param rspStr
+     * @return
+     */
+    public static String getResult(String rspStr) {
+        JSONObject json = JSONObject.parseObject(rspStr);
+        JSONObject intent = json.getJSONObject("intent");
+        JSONArray results = json.getJSONArray("results");
+        Integer code = intent.getInteger("code");
+        if (ConstantCode.SUCCESS.intValue() != code.intValue()) return null;
+        JSONObject result = (JSONObject) results.get(0);
+        JSONObject values = result.getJSONObject("values");
+        String text = values.getString("text");
+        return text;
     }
 
     public static void main(String[] args) {
         Integer reqType = 0;
         String userId = "21100880";
         String content = "你好吗?";
-        query(reqType, userId, content);
+        try {
+            String query = query(reqType, userId, content);
+            String result = getResult(query);
+
+
+            Knowledge knowledge = new Knowledge();
+            knowledge.setQuery("");
+            knowledge.setReply(result);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
