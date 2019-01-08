@@ -8,7 +8,6 @@ import com.wechat.enums.ReqTypeEnum;
 import okhttp3.*;
 
 import java.io.IOException;
-import java.util.Collection;
 
 /**
  * 图灵机器人
@@ -27,24 +26,24 @@ public class TuringRobotUtil {
      * @param reqType 输入类型:0-文本(默认)、1-图片、2-音频
      * @param userId  用户位移标识
      */
-    public static String query(Integer reqType, String userId, String content) throws IOException {
+    public static String query(Integer reqType, String userId, String sql) throws IOException {
         JSONObject request = new JSONObject();
         request.put("reqType", reqType);
         JSONObject perception = new JSONObject();
 
         if (ReqTypeEnum.TEXT.getCode().intValue() == reqType) {
             JSONObject inputText = new JSONObject();
-            inputText.put("text", content);
+            inputText.put("text", sql);
             perception.put("inputText", inputText);
 
         } else if (ReqTypeEnum.PICTURE.getCode().intValue() == reqType) {
             JSONObject inputImage = new JSONObject();
-            inputImage.put("url", content);
+            inputImage.put("url", sql);
             perception.put("inputImage", inputImage);
 
         } else if (ReqTypeEnum.MEDIA.getCode().intValue() == reqType) {
             JSONObject inputMedia = new JSONObject();
-            inputMedia.put("url", content);
+            inputMedia.put("url", sql);
             perception.put("inputMedia", inputMedia);
 
         }
@@ -77,33 +76,52 @@ public class TuringRobotUtil {
      * @param rspStr
      * @return
      */
-    public static String getResult(String rspStr) {
+    public static Knowledge getResult(String rspStr, String sql) {
         JSONObject json = JSONObject.parseObject(rspStr);
         JSONObject intent = json.getJSONObject("intent");
         JSONArray results = json.getJSONArray("results");
         Integer code = intent.getInteger("code");
-        if (ConstantCode.SUCCESS.intValue() != code.intValue()) return null;
+        if (ConstantCode.SUCCESS.intValue() != code.intValue())
+            return null;
         JSONObject result = (JSONObject) results.get(0);
+        /**
+         *          resultType
+         *              文本(text);
+         *              连接(url);
+         *              音频(voice);
+         *              视频(video);
+         *              图片(image);
+         *              图文(news)
+         *         MsgType
+         *              text        文本
+         *              image       图片
+         *              voice       语音
+         *              video       视频
+         *              shortvideo  小视频
+         *              location    地理信息
+         *              link        链接
+         */
+        String resultType = result.getString("resultType");
         JSONObject values = result.getJSONObject("values");
         String text = values.getString("text");
-        return text;
+        Knowledge knowledge = new Knowledge();
+        knowledge.setQuery(sql);
+        knowledge.setReply(text);
+        knowledge.setType(resultType);
+        return knowledge;
     }
 
     public static void main(String[] args) {
         Integer reqType = 0;
         String userId = "21100880";
-        String content = "你好吗?";
+        String sql = "你好吗?";
         try {
-//            String query = query(reqType, userId, content);
+//            String query = query(reqType, userId, sql);
 
-           String query = " {\"emotion\":{\"robotEmotion\":{\"a\":0,\"d\":0,\"emotionId\":0,\"p\":0},\"userEmotion\":{\"a\":0,\"d\":0,\"emotionId\":21500,\"p\":0}},\"intent\":{\"actionName\":\"\",\"code\":10004,\"intentName\":\"\"},\"results\":[{\"groupType\":1,\"resultType\":\"text\",\"values\":{\"text\":\"还不错，你呢\"}}]}";
+            String query = " {\"emotion\":{\"robotEmotion\":{\"a\":0,\"d\":0,\"emotionId\":0,\"p\":0},\"userEmotion\":{\"a\":0,\"d\":0,\"emotionId\":21500,\"p\":0}},\"intent\":{\"actionName\":\"\",\"code\":10004,\"intentName\":\"\"},\"results\":[{\"groupType\":1,\"resultType\":\"text\",\"values\":{\"text\":\"还不错，你呢\"}}]}";
 
-            String result = getResult(query);
-
-
-            Knowledge knowledge = new Knowledge();
-            knowledge.setQuery("");
-            knowledge.setReply(result);
+            Knowledge knowledge = getResult(query, sql);
+            System.out.println("--->:" + JSONObject.toJSONString(knowledge));
         } catch (Exception e) {
             e.printStackTrace();
         }
