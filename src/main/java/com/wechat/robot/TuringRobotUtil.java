@@ -81,8 +81,8 @@ public class TuringRobotUtil {
         JSONObject intent = json.getJSONObject("intent");
         JSONArray results = json.getJSONArray("results");
         Integer code = intent.getInteger("code");
-        if (ConstantCode.SUCCESS.intValue() != code.intValue())
-            return null;
+   /*     if (ConstantCode.SUCCESS.intValue() != code.intValue())
+            return null;*/
         JSONObject result = (JSONObject) results.get(0);
         /**
          *          resultType
