@@ -138,7 +138,7 @@ public class WechatController {
                 Knowledge knowledge = TuringRobotUtil.getResult(reply, sql);
                 knowledgeService.save(knowledge);
                 return replyTextMsg(textMessage.getFromUserName(), textMessage.getToUserName(), knowledge.getReply());
-            } catch (IOException e) {
+            } catch (Exception e) {
                 logger.info("调用图灵机器人异常。。。。" + e.getMessage());
                 // 朕今天回复太多了，不想说话了。。。
                 reply = "朕今天回复太多了，不想说话了。。。,想要和朕自动聊天，明天再来吧。。。";
