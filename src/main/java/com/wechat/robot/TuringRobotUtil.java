@@ -81,8 +81,6 @@ public class TuringRobotUtil {
         JSONObject intent = json.getJSONObject("intent");
         JSONArray results = json.getJSONArray("results");
         Integer code = intent.getInteger("code");
-       if (ConstantCode.SUCCESS.intValue() != code.intValue())
-            return null;
         JSONObject result = (JSONObject) results.get(0);
         /**
          *          resultType
@@ -118,7 +116,7 @@ public class TuringRobotUtil {
         try {
 //            String query = query(reqType, userId, sql);
 
-            String  query = "{\"intent\":{\"actionName\":\"\",\"code\":7110,\"intentName\":\"\"},\"results\":[{\"groupType\":0,\"resultType\":\"text\",\"values\":{\"text\":\"给你一次换话题的机会，这次我就不找警察蜀黍咯。\"}}]}";
+            String  query = "{\"intent\":{\"actionName\":\"\",\"code\":10013,\"intentName\":\"\"},\"results\":[{\"groupType\":1,\"resultType\":\"text\",\"values\":{\"text\":\"羿，帝尧时期人物，嫦娥的丈夫，被帝尧封于商丘。他善于射箭，曾经帮助尧帝射下九日。只留一日，给大地带来复苏的生机，人们尊称他为“大羿”。\"}}]}";
 
 
             Knowledge knowledge = getResult(query, sql);
