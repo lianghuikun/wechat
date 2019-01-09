@@ -42,8 +42,6 @@ public class WechatController {
     private static Logger logger = LoggerFactory.getLogger(WechatController.class);
     private static final String WECHAT_TOKEN = "KING";
     @Autowired
-    private ExecutorService executorService;
-    @Autowired
     private KnowledgeService knowledgeService;
 
     /**
@@ -138,9 +136,7 @@ public class WechatController {
                 reply = TuringRobotUtil.query(ReqTypeEnum.TEXT.getCode(), UUIDUtil.getId(), sql);
                 logger.info("--图灵机器人回复-->:" + reply);
                 Knowledge knowledge = TuringRobotUtil.getResult(reply, sql);
-                executorService.submit(() -> {
-                    knowledgeService.save(knowledge);
-                });
+                knowledgeService.save(knowledge);
                 return replyTextMsg(textMessage.getFromUserName(), textMessage.getToUserName(), knowledge.getReply());
             } catch (IOException e) {
                 logger.info("调用图灵机器人异常。。。。" + e.getMessage());
