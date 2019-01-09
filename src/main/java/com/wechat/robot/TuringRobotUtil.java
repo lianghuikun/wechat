@@ -81,8 +81,8 @@ public class TuringRobotUtil {
         JSONObject intent = json.getJSONObject("intent");
         JSONArray results = json.getJSONArray("results");
         Integer code = intent.getInteger("code");
-   /*     if (ConstantCode.SUCCESS.intValue() != code.intValue())
-            return null;*/
+       if (ConstantCode.SUCCESS.intValue() != code.intValue())
+            return null;
         JSONObject result = (JSONObject) results.get(0);
         /**
          *          resultType
@@ -118,7 +118,8 @@ public class TuringRobotUtil {
         try {
 //            String query = query(reqType, userId, sql);
 
-            String query = " {\"emotion\":{\"robotEmotion\":{\"a\":0,\"d\":0,\"emotionId\":0,\"p\":0},\"userEmotion\":{\"a\":0,\"d\":0,\"emotionId\":21500,\"p\":0}},\"intent\":{\"actionName\":\"\",\"code\":10004,\"intentName\":\"\"},\"results\":[{\"groupType\":1,\"resultType\":\"text\",\"values\":{\"text\":\"还不错，你呢\"}}]}";
+            String  query = "{\"intent\":{\"actionName\":\"\",\"code\":7110,\"intentName\":\"\"},\"results\":[{\"groupType\":0,\"resultType\":\"text\",\"values\":{\"text\":\"给你一次换话题的机会，这次我就不找警察蜀黍咯。\"}}]}";
+
 
             Knowledge knowledge = getResult(query, sql);
             System.out.println("--->:" + JSONObject.toJSONString(knowledge));
